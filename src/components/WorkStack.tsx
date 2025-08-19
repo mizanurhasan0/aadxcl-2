@@ -64,9 +64,9 @@ const Card = ({
 	const start = index * 0.18
 	const end = start + 0.28
 
-	const y = useTransform(progress, [start, end], [80, -index * 16])
+	const y = useTransform(progress, [start, end], [80, index * 6])
 	const opacity = useTransform(progress, [start, start + 0.1], [0, 1])
-	const scale = useTransform(progress, [start, end], [0.98, 1 - index * 0.02])
+	const scale = useTransform(progress, [start, end], [0.98, 1 + index * 0.02])
 
 	return (
 		<motion.div
