@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useLayoutEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
 
@@ -12,7 +12,12 @@ type CaseCard = {
 	bgClass: string
 	accentClass: string
 }
-
+type TCard = {
+	index: number
+	total: number
+	progress: any
+	data: CaseCard
+}
 const CARDS: CaseCard[] = [
 	{
 		tag: 'Travel',
@@ -52,25 +57,41 @@ const CARDS: CaseCard[] = [
 	}
 ]
 
+// How much of the previous card each next card overlaps (0.7 = 70%)
+const OVERLAP = 0.7
+// @WorkStack.tsx every thinkl right way, now i want to card 1st card than scroll bottom to 2nd card will be up and goes 90% of 1st card than goes to scroll 3rd card goes to 90% in 2nd card and so on.
 const Card = ({
 	index,
+	total,
 	progress,
 	data
-}: {
-	index: number
-	progress: any
-	data: CaseCard
-}) => {
-	const start = index * 0.18
-	const end = start + 0.28
+}: TCard) => {
+	const ref = useRef<HTMLDivElement | null>(null)
+	const [height, setHeight] = useState(0)
 
-	const y = useTransform(progress, [start, end], [80, index * 6])
-	const opacity = useTransform(progress, [start, start + 0.1], [0, 1])
-	const scale = useTransform(progress, [start, end], [0.98, 1 + index * 0.02])
+	useLayoutEffect(() => {
+		if (!ref.current) return
+		const measure = () => setHeight(ref.current!.getBoundingClientRect().height)
+		measure()
+		window.addEventListener('resize', measure)
+		return () => window.removeEventListener('resize', measure)
+	}, [])
+
+	// Allocate an equal slice of scroll progress per card
+	const step = 1 / (total + 1)
+	const start = index * step
+	const end = start + step
+
+	// Move this card upward to overlap 70% of each previous card's height
+	const stackedY = -(index * height * OVERLAP)
+	const y = useTransform(progress, [start, end], [0, stackedY])
+	const opacity = useTransform(progress, [start, start + step * 0.5], [0, 1])
+	const scale = useTransform(progress, [start, end], [1, 1])
 
 	return (
 		<motion.div
-			style={{ y, opacity, scale, zIndex: 50 - index }}
+			ref={ref}
+			style={{ y, opacity, scale, zIndex: 100 + index }}
 			className={`relative rounded-3xl border border-border shadow-lg overflow-hidden ${data.bgClass}`}
 		>
 			{/* Accent stripes on the right side */}
@@ -98,8 +119,8 @@ const ZoomImage = () => {
 	const { scrollYProgress } = useScroll({
 		target: ref,
 		offset: ['start end', 'end start']
-	})
-	const scale = useTransform(scrollYProgress, [0, 1], [1, 1.25])
+	});
+	const scale = useTransform(scrollYProgress, [0, 1], [1, 1.50])
 	const radius = useTransform(scrollYProgress, [0, 1], [24, 0])
 
 	return (
@@ -112,7 +133,7 @@ const ZoomImage = () => {
 					<Image
 						src="/globe.svg"
 						alt="Project preview"
-						fill
+						fill						
 						className="object-contain p-12 opacity-80"
 						priority
 					/>
@@ -132,11 +153,11 @@ const WorkStack = () => {
 	return (
 		<section id="work" className="relative">
 			{/* Stacked cards phase */}
-			<div ref={ref} className="relative h-[280vh]">
+			<div ref={ref} className="relative h-[320vh]">
 				<div className="sticky top-24 px-4 sm:px-6 lg:px-8">
 					<div className="mx-auto max-w-6xl space-y-4">
 						{CARDS.map((card, index) => (
-							<Card key={card.tag} index={index} progress={scrollYProgress} data={card} />
+							<Card key={card.tag} index={index} total={CARDS.length} progress={scrollYProgress} data={card} />
 						))}
 					</div>
 				</div>

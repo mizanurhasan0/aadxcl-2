@@ -7,6 +7,8 @@ import Pricing from '@/components/Pricing'
 import Footer from '@/components/Footer'
 import WorkStack from '@/components/WorkStack'
 import BottomNav from '@/components/BottomNav'
+import News from '@/components/News'
+import FocusServices from '@/components/FocusServices'
 
 export default function Home() {
   return (
@@ -17,6 +19,8 @@ export default function Home() {
         <WorkStack />
         <Services />
         <Projects />
+        <News />
+        <FocusServices />
         <Testimonials />
         <Pricing />
       </main>
