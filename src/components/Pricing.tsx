@@ -110,7 +110,6 @@ const Pricing = () => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut",
       },
     },
   }
@@ -123,7 +122,6 @@ const Pricing = () => {
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
       },
     },
     hover: {
@@ -131,7 +129,6 @@ const Pricing = () => {
       scale: 1.05,
       transition: {
         duration: 0.3,
-        ease: "easeOut",
       },
     },
   }
@@ -172,18 +169,30 @@ const Pricing = () => {
             {pricingPlans.map((plan, index) => {
               const IconComponent = plan.icon
               return (
-                <motion.div
+                <div
                   key={plan.id}
-                  variants={cardVariants}
-                  whileHover="hover"
-                  onHoverStart={() => setHoveredCard(plan.id)}
-                  onHoverEnd={() => setHoveredCard(null)}
-                  className={`relative bg-card rounded-3xl p-8 border-2 transition-all duration-500 ${
-                    plan.popular
-                      ? 'border-accent shadow-xl scale-105'
-                      : 'border-border hover:border-accent/50'
-                  } ${hoveredCard === plan.id ? 'shadow-2xl' : 'shadow-lg'}`}
+                  className={[
+                    'relative rounded-3xl p-[6px] overflow-hidden',
+                    'shadow-[0_0_18px_0_rgba(56,189,248,0.25)]'
+                  ].join(' ')}
                 >
+                  <span
+                    aria-hidden
+                    className={[
+                      'pointer-events-none absolute inset-0 rounded-[inherit]',
+                      'bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_190deg,rgba(56,189,248,1)_360deg)]',
+                      inView ? 'animate-[spin_2.6s_linear_infinite]' : ''
+                    ].join(' ')}
+                  />
+                  <motion.div
+                    variants={cardVariants}
+                    whileHover="hover"
+                    onHoverStart={() => setHoveredCard(plan.id)}
+                    onHoverEnd={() => setHoveredCard(null)}
+                    className={`relative z-10 bg-card rounded-3xl p-8 transition-all duration-500 ${
+                      plan.popular ? 'shadow-xl scale-105' : ''
+                    } ${hoveredCard === plan.id ? 'shadow-2xl' : 'shadow-lg hover:shadow-xl'}`}
+                  >
                   {/* Popular Badge */}
                   {plan.popular && (
                     <motion.div
@@ -256,7 +265,8 @@ const Pricing = () => {
                     transition={{ duration: 0.3 }}
                     className={`absolute inset-0 bg-gradient-to-br ${plan.color} rounded-3xl`}
                   />
-                </motion.div>
+                  </motion.div>
+                </div>
               )
             })}
           </div>

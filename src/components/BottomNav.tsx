@@ -58,15 +58,27 @@ const BottomNav = () => {
               <a
                 href={item.href}
                 className={[
-                  'relative inline-flex items-center rounded-full px-4 py-3 text-sm font-semibold transition-all duration-300',
+                  'relative inline-flex items-center rounded-full text-sm font-semibold transition-all duration-300',
                   item.isPrimary
-                    ? 'bg-accent text-accent-foreground hover:bg-accent/90'
-                    : active === item.id
+                    ? 'p-[2px]'
+                    : 'px-4 py-3',
+                  !item.isPrimary && active === item.id
                     ? 'bg-black/5 dark:bg-white/10 text-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
+                    : !item.isPrimary
+                    ? 'text-muted-foreground hover:text-foreground'
+                    : ''
                 ].join(' ')}
               >
-                {item.label}
+                {item.isPrimary ? (
+                  <span className="absolute inset-0 rounded-full bg-[linear-gradient(90deg,theme(colors.fuchsia.500),theme(colors.amber.400),theme(colors.sky.400),theme(colors.fuchsia.500))] bg-[length:200%_100%] animate-[gradient-move_2s_linear_infinite]" aria-hidden />
+                ) : null}
+                {item.isPrimary ? (
+                  <span className="relative z-10 inline-flex items-center rounded-full bg-accent text-accent-foreground hover:bg-accent/90 px-4 py-3">
+                    {item.label}
+                  </span>
+                ) : (
+                  <span className="relative z-10">{item.label}</span>
+                )}
               </a>
             </li>
           ))}
