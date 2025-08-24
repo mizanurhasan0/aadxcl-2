@@ -30,22 +30,22 @@ const BrandMarquee: React.FC<BrandMarqueeProps> = ({ logos = defaultLogos, rowGa
   const shift = `${-(100 / repeats)}%`
 
   return (
-    <div className="w-full select-none">
-      <div className="marquee mask-fade py-6" style={{ ['--duration' as any]: `${speedSecondsRow1}s`, ['--marquee-shift' as any]: shift }}>
+    <div className="w-full select-none space-y-4">
+      <div className="marquee mask-fade " style={{ ['--duration' as any]: `${speedSecondsRow1}s`, ['--marquee-shift' as any]: shift }}>
         <div className={`marquee__track ${rowGapClassName}`} aria-hidden>
           {sequence.map((logo, index) => (
             <div key={`row1-${index}`} className="flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity">
-              <Image src={logo.src} alt={logo.alt} width={120} height={40} className="h-8 w-auto" />
+              <Image src={logo.src} alt={logo.alt} width={80} height={20} className="h-4 w-auto" />
             </div>
           ))}
         </div>
       </div>
 
-      <div className="marquee marquee--reverse mask-fade py-6" style={{ ['--duration' as any]: `${speedSecondsRow2}s`, ['--marquee-shift' as any]: shift }}>
+      <div className="marquee marquee--reverse mask-fade " style={{ ['--duration' as any]: `${speedSecondsRow2}s`, ['--marquee-shift' as any]: shift }}>
         <div className={`marquee__track ${rowGapClassName}`} aria-hidden>
           {sequence.map((logo, index) => (
             <div key={`row2-${index}`} className="flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity">
-              <Image src={logo.src} alt={logo.alt} width={120} height={40} className="h-8 w-auto" />
+              <Image src={logo.src} alt={logo.alt} width={80} height={20} className="h-4 w-auto" />
             </div>
           ))}
         </div>
