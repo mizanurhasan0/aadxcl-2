@@ -51,6 +51,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-gradient-hero:var(--gradient-hero)
   
   --font-sans: var(--font-outfit);
   --font-serif: var(--font-playfair);
@@ -197,4 +198,36 @@ body {
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* Marquee (infinite horizontal scroll) */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.marquee__track {
+  display: flex;
+  align-items: center;
+  gap: 4rem; /* can be overridden from component */
+  white-space: nowrap;
+  animation: marquee var(--duration, 30s) linear infinite;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee--reverse .marquee__track {
+  animation-direction: reverse;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--marquee-shift, -50%)); }
+}
+
+/* Soft edge fade mask for marquee rows */
+.mask-fade {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
 }
